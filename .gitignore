@@ -1,0 +1,34 @@
+# Tests
+*.test
+unit-tests.xml
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Sam builds
+.aws-sam/
+
+#Environment vars
+.envrc
+.env
+
+# Node
+node_modules/
+
+# Typescript
+.tsbuildinfo
+
+# OS
+.DS_Store
+
+# AWS CDK
+cdk/**/*.js
+!cdk/esbuild.config.js
+!cdk/jest.config.js
+cdk/**/*.d.ts
+cdk/.cdk.staging
+cdk/cdk.out/
+cdk/cdk.context.json
+
+# Rust
+src/**/target/
