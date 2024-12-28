@@ -1,0 +1,16 @@
+[package]
+name = "zero-shot-chat-with-document"
+version = "0.1.0"
+edition = "2021"
+authors = ["Luis Carlos Osorio Jayk"]
+
+[dependencies]
+aws-config = "1.5.8"
+aws_lambda_events = { version = "0.16.0", default-features = false, features = ["s3"] }
+lambda_runtime = "0.13.0"
+tokio = { version = "1", features = ["macros"] }
+tracing-subscriber = "0.3.19"
+serde = "1.0.210"
+serde_json = "1.0.132"
+aws-sdk-s3 = "1.66.0"
+aws-sdk-bedrockagentruntime = "1.67.0"

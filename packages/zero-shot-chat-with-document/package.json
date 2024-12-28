@@ -1,0 +1,28 @@
+{
+  "name": "@luisk-genai-labs/zero-shot-chat-with-document",
+  "version": "1.0.0",
+  "stackName": "zero-shot-chat-with-document",
+  "description": "Chat with on single documents without the overhead of setting up a vector database or ingesting data.",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk",
+    "clean": "rimraf lib cdk.out",
+    "deploy": "cdk deploy",
+    "diff": "cdk diff",
+    "synth": "cdk synth"
+  },
+  "dependencies": {
+    "@luisk-genai-labs/shared-constructs": "workspace:*",
+    "@luisk-genai-labs/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "@types/node": "^22.10.2",
+    "aws-cdk": "^2.0.0",
+    "jest": "^29.0.0",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.0.0"
+  }
+}

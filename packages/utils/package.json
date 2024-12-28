@@ -1,0 +1,15 @@
+{
+  "name": "@luisk-genai-labs/utils",
+  "version": "1.0.0",
+  "description": "Utility functions, libs, types, and else.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "author": "Luis Carlos Osorio Jayk",
+  "license": "ISC",
+  "peerDependencies": {
+    "aws-cdk-lib": "^2.173.4"
+  }
+}

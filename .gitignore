@@ -22,13 +22,13 @@ node_modules/
 .DS_Store
 
 # AWS CDK
-cdk/**/*.js
-!cdk/esbuild.config.js
-!cdk/jest.config.js
-cdk/**/*.d.ts
-cdk/.cdk.staging
-cdk/cdk.out/
-cdk/cdk.context.json
+packages/**/*.js
+!packages/esbuild.config.js
+!packages/jest.config.js
+packages/**/*.d.ts
+packages/.cdk.staging
+packages.out/
+packages/cdk.context.json
 
 # Rust
-src/**/target/
+target/

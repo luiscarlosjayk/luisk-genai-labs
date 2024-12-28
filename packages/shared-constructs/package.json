@@ -1,0 +1,22 @@
+{
+  "name": "@luisk-genai-labs/shared-constructs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "author": "Luis Carlos Osorio Jayk",
+  "license": "ISC",
+  "dependencies": {
+    "@luisk-genai-labs/utils": "workspace:*",
+    "cargo-lambda-cdk": "^0.0.31"
+  },
+  "peerDependencies": {
+    "@luisk-genai-labs/utils": "workspace:*",
+    "aws-cdk-lib": "^2.173.4",
+    "cargo-lambda-cdk": "^0.0.31",
+    "constructs": "^10.4.2"
+  }
+}
