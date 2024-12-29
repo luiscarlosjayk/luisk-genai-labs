@@ -1,6 +1,7 @@
 {
   "name": "@luisk-genai-labs/utils",
   "version": "1.0.0",
+  "private":"true",
   "description": "Utility functions, libs, types, and else.",
   "main": "index.js",
   "scripts": {
