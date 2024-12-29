@@ -1,7 +1,6 @@
 # Lab: Zero shot chat with document
 
 Contributors: [@luiscarlosjayk](https://github.com/luiscarlosjayk)
-
 ----
 
 In this lab we showcase how to use [Bedrock RetrieveAndGenerate endpoint](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_RetrieveAndGenerate.html) to ask questions on single documents hosted in a S3 bucket without the overhead of setting up a vector store, making it frictionless for simple applications.

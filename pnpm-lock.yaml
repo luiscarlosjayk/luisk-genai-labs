@@ -37,6 +37,62 @@ importers:
         specifier: ~5.7.2
         version: 5.7.2
 
+  labs/stub-lab:
+    dependencies:
+      '@luisk-genai-labs/shared-constructs':
+        specifier: workspace:*
+        version: link:../../packages/shared-constructs
+      '@luisk-genai-labs/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
+    devDependencies:
+      '@types/jest':
+        specifier: ^29.0.0
+        version: 29.5.14
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.2
+      aws-cdk:
+        specifier: ^2.0.0
+        version: 2.173.3
+      jest:
+        specifier: ^29.0.0
+        version: 29.7.0(@types/node@22.10.2)
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
+      ts-jest:
+        specifier: ^29.0.0
+        version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.10.2))(typescript@5.7.2)
+
+  labs/zero-shot-chat-with-document:
+    dependencies:
+      '@luisk-genai-labs/shared-constructs':
+        specifier: workspace:*
+        version: link:../../packages/shared-constructs
+      '@luisk-genai-labs/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
+    devDependencies:
+      '@types/jest':
+        specifier: ^29.0.0
+        version: 29.5.14
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.2
+      aws-cdk:
+        specifier: ^2.0.0
+        version: 2.173.3
+      jest:
+        specifier: ^29.0.0
+        version: 29.7.0(@types/node@22.10.2)
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
+      ts-jest:
+        specifier: ^29.0.0
+        version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.10.2))(typescript@5.7.2)
+
   packages/shared-constructs:
     dependencies:
       '@luisk-genai-labs/utils':
@@ -57,34 +113,6 @@ importers:
       aws-cdk-lib:
         specifier: ^2.173.4
         version: 2.173.4(constructs@10.4.2)
-
-  packages/zero-shot-chat-with-document:
-    dependencies:
-      '@luisk-genai-labs/shared-constructs':
-        specifier: workspace:*
-        version: link:../shared-constructs
-      '@luisk-genai-labs/utils':
-        specifier: workspace:*
-        version: link:../utils
-    devDependencies:
-      '@types/jest':
-        specifier: ^29.0.0
-        version: 29.5.14
-      '@types/node':
-        specifier: ^22.10.2
-        version: 22.10.2
-      aws-cdk:
-        specifier: ^2.0.0
-        version: 2.173.3
-      jest:
-        specifier: ^29.0.0
-        version: 29.7.0(@types/node@22.10.2)
-      rimraf:
-        specifier: ^6.0.1
-        version: 6.0.1
-      ts-jest:
-        specifier: ^29.0.0
-        version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.10.2))(typescript@5.7.2)
 
 packages:
 
