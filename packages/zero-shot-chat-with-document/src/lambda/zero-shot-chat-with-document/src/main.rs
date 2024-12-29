@@ -20,40 +20,40 @@ async fn handler(
 ) -> Result<(), Error> {
     tracing::info!("handler invoked");
 
-    let model_arn = std::env::var("MODEL_ARN").unwrap();
+    let model_arn =
+        std::env::var("MODEL_ARN").expect("Expected MODEL_ARN environment variable to be defined");
     let records = event.payload.records;
-    let first_record = records.first().unwrap();
-    let bucket_name = first_record.s3.bucket.name.as_ref().unwrap();
-    let object_key = first_record.s3.object.key.as_ref().unwrap();
+    let Some(first_record) = records.first() else {
+        return Err("No record to process in event received".into());
+    };
+    let Some(bucket_name) = first_record.s3.bucket.name.as_ref() else {
+        return Err("No bucket name found in record to process".into());
+    };
+    let Some(object_key) = first_record.s3.object.key.as_ref() else {
+        return Err("".into());
+    };
 
     tracing::info!({ %bucket_name, object_key }, "First record retrieved.");
 
-    let input = RetrieveAndGenerateInput::builder()
-        .text(PROMPT)
-        .build()
-        .unwrap();
+    let input = RetrieveAndGenerateInput::builder().text(PROMPT).build()?;
     let retrieve_and_generate_type = RetrieveAndGenerateType::ExternalSources;
     let s3_document_uri = format!("s3://{bucket_name}/{object_key}");
     let s3_retrieval_doc = S3ObjectDoc::builder()
         .set_uri(Some(s3_document_uri))
-        .build()
-        .unwrap();
+        .build()?;
     let retrieval_s3_sources = ExternalSource::builder()
         .set_source_type(Some(ExternalSourceType::S3))
         .set_s3_location(Some(s3_retrieval_doc))
-        .build()
-        .unwrap();
+        .build()?;
     let external_source_retrieval_configuration =
         ExternalSourcesRetrieveAndGenerateConfiguration::builder()
             .set_model_arn(Some(model_arn))
             .set_sources(Some(vec![retrieval_s3_sources]))
-            .build()
-            .unwrap();
+            .build()?;
     let retrieve_and_generate_configuration = RetrieveAndGenerateConfiguration::builder()
         .set_type(Some(retrieve_and_generate_type))
         .set_external_sources_configuration(Some(external_source_retrieval_configuration))
-        .build()
-        .unwrap();
+        .build()?;
 
     let response = bedrock_agent_runtime_client
         .retrieve_and_generate()
@@ -61,7 +61,10 @@ async fn handler(
         .set_retrieve_and_generate_configuration(Some(retrieve_and_generate_configuration))
         .send()
         .await?;
-    let response_output = response.output().unwrap().text();
+    let response_output = response
+        .output()
+        .ok_or("Expected text output defined from RetrieveAndGenerate response. Got None instead.")?
+        .text();
 
     tracing::info!("Response: {:#?}", response_output);
 
