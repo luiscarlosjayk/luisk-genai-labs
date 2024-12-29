@@ -17,7 +17,7 @@ const PROMPT: &str = "Summarize in few sentences the given document.";
 async fn handler(
     event: LambdaEvent<S3Event>,
     bedrock_agent_runtime_client: &aws_sdk_bedrockagentruntime::Client,
-) -> Result<(), Error> {
+) -> Result<String, Error> {
     tracing::info!("handler invoked");
 
     let model_arn =
@@ -68,7 +68,7 @@ async fn handler(
 
     tracing::info!("Response: {:#?}", response_output);
 
-    Ok(())
+    Ok(response_output.into())
 }
 
 #[tokio::main]
