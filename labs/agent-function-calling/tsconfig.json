@@ -1,0 +1,14 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "resolveJsonModule": true
+    },
+    "references": [
+        { "path": "../../packages/shared-constructs" },
+        { "path": "../../packages/utils" }
+    ],
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "cdk.out", "lib"]
+}

@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: Ice Cream Order API
+  version: 1.0.0
+
+paths:
+  /start-order:
+    post:
+      operationId: StartOrder
+      description: |
+        Given the name of the client as input it creates a new order.
+      summary: Creates an order given the name of the client as input.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - client_name
+              properties:
+                client_name:
+                  type: string
+      responses:
+        '200':
+          description: Order started successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: string
+
+  /add-ice-cream/{orderId}:
+    post:
+      operationId: AddIceCream
+      summary: Adds a flavor to an existing order.
+      description: |
+        Adds an ice cream of a given flavor to an existing order.
+        The order id comes as a path parameter, while the flavor
+        comes in the request body.
+      parameters:
+        - name: orderId
+          in: path
+          description: Unique ID of the order.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - flavor
+              properties:
+                flavor:
+                  type: string
+      responses:
+        '200':
+          description: Ice cream added successfully.
+
+  /remove-ice-cream/{orderId}:
+    post:
+      operationId: RemoveIceCream
+      summary: Removes a flavor from an existing order.
+      description: |
+        Adds an ice cream of a given flavor to an existing order.
+        The order id comes as a path parameter, while the flavor
+        comes in the request body.
+      parameters:
+        - name: orderId
+          in: path
+          description: Unique ID of the order.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - flavor
+              properties:
+                flavor:
+                  type: string
+      responses:
+        '200':
+          description: Ice cream removed successfully.
