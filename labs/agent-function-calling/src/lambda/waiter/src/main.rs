@@ -1,7 +1,6 @@
 mod types;
 
 use std::collections::HashMap;
-
 use lambda_runtime::{
     run, service_fn,
     tracing::{self, instrument},
@@ -14,14 +13,51 @@ async fn handler(event: LambdaEvent<AgentApiRequest>) -> Result<AgentApiResponse
     tracing::info!("waiter handler invoked with payload: {:#?}", event);
 
     let agent_request = event.payload;
-
+    let api_path = agent_request.api_path.as_str();
+    let order_id = event.context.request_id;
     let mut response_content = HashMap::new();
-    response_content.insert(
-        "application/json".to_string(),
-        types::ResponseBodyContentType {
-            body: "Action done.".to_string(),
-        },
-    );
+    let mut http_status_code = 201;
+
+    if api_path == "/start-order" {
+        response_content.insert(
+            "application/json".to_string(),
+            types::ResponseBodyContentType {
+                body: serde_json::json!({
+                    "orderId": order_id
+                }).to_string(),
+            },
+        );
+    } else if api_path.starts_with("/add-ice-cream/") {
+        response_content.insert(
+            "application/json".to_string(),
+            types::ResponseBodyContentType {
+                body: serde_json::json!({
+                    "message": format!("Ice cream added to order {order_id}"),
+                }).to_string()
+            },
+        );
+    } else if api_path.starts_with("/remove-ice-cream/") {
+        http_status_code = 200;
+        response_content.insert(
+            "application/json".to_string(),
+            types::ResponseBodyContentType {
+                body: serde_json::json!({
+                    "message": format!("Ice cream removed from order {order_id}"),
+                }).to_string()
+            },
+        );
+    } else {
+        http_status_code = 500;
+        response_content.insert(
+            "application/json".to_string(),
+            types::ResponseBodyContentType {
+                body: serde_json::json!({
+                    "message": "Unknown action",
+                }).to_string()
+            },
+        );
+    }
+
     let response = AgentApiResponse {
         message_version: "1.0".to_string(),
         session_attributes: agent_request.session_attributes,
@@ -30,7 +66,7 @@ async fn handler(event: LambdaEvent<AgentApiRequest>) -> Result<AgentApiResponse
             action_group: agent_request.action_group,
             api_path: agent_request.api_path,
             http_method: agent_request.http_method,
-            http_status_code: 200,
+            http_status_code,
             response_body: types::ResponseBody {
                 content: response_content,
             },

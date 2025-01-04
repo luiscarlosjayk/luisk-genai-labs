@@ -22,7 +22,7 @@ paths:
                 client_name:
                   type: string
       responses:
-        '200':
+        '201':
           description: Order started successfully.
           content:
             application/json:
@@ -59,8 +59,15 @@ paths:
                 flavor:
                   type: string
       responses:
-        '200':
+        '201':
           description: Ice cream added successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 
   /remove-ice-cream/{orderId}:
     post:
@@ -91,3 +98,10 @@ paths:
       responses:
         '200':
           description: Ice cream removed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string

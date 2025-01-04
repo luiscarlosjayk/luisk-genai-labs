@@ -1,8 +1,7 @@
 mod types;
 
 use aws_sdk_bedrockagentruntime::types::{
-    ActionGroupExecutor, AgentActionGroup, FunctionDefinition, FunctionSchema,
-    InlineAgentResponseStream, ParameterDetail, ParameterType, ApiSchema,
+    ActionGroupExecutor, AgentActionGroup, ApiSchema, FunctionDefinition, FunctionSchema, InlineAgentResponseStream, OrchestrationTrace, ParameterDetail, ParameterType, Rationale, Trace
 };
 use lambda_runtime::{
     run, service_fn,
@@ -13,19 +12,21 @@ use types::ClientPrompt;
 
 /// The instructions that tell the inline agent what it should do and how it should interact with users.
 const AGENT_INSTRUCTION: &str = r#"
-    You are an ice cream making assistant in charge of operating the ice cream machine. Your role is to:
-
-    1. Accept a new order with given client's name and create a new order based on it.
-    2. Accept ice cream flavor requests and:
-    2.1. Add flavors to a given order if requested.
-    2.2. Remove flavors to a given order if requested.
-    2.3. Prepare the ice creams of the falvors in it.
-    2. Understand different ways customers might request flavors (e.g., "vanilla", "chocolate chip", "strawberry").
-    3. Respond appropriately to requests, including:
-        - Confirming when an ice cream has been prepared.
-        - Explaining if a requested flavor isn't available.
-        - Rejecting the request if the flavor request is ambiguous.
-        - Handling one flavor request at a time.
+    You are an ice cream making assistant in charge of operating the requests for an ice cream shop.
+    Recommended flow of instructions when a client request comes in is:
+    1. Identify client's name from the request
+    2. Create a new order with client's name
+    3. Identify flavors to add from the request
+    4. If any flavor needs to be added, then add those flavors to the client's order
+    5. Identify flavors to remove from the request
+    6. If any flavor needs to be removed, then delete those flavors from the client's order
+    7. If a unavailable flavor is requested, explain it is not available and omit it
+    8. Respond appropriately to requests, including:
+        - Confirming when an ice cream has been prepared
+        - Explaining if a requested flavor isn't available
+        - Rejecting the request if the flavor request is ambiguous
+        - Handling one flavor request at a time
+    9. Prepare each ice cream flavor from the order
 
     Extra Guidelines:
     - You can prepare these flavors:
@@ -35,10 +36,27 @@ const AGENT_INSTRUCTION: &str = r#"
         4. Mint Chocolate Chip
         5. Cookie Dough
     - You can take up to 5 flavors on a given order, if there are more the order should be split.
-    - When someone requests a flavor not on this list, explain which flavors are available instead.
+    - When someone requests a flavor not in this list, explain which flavors are available instead.
     - You cannot prepare ice cream flavors if you haven't added those flavors to the given order first.
 
     Tone: Always maintain a friendly, helpful tone while focusing on the core task of ice cream preparation.
+
+    <example>
+        <client>Hi, my name is Pedro, can I take a Vanilla ice cream, two of Chocolate and last one, hmm, make it Cookie Dough</client>
+        <rationale>
+            1. Client's name is Pedro
+            2. Flavors to add to order are:
+                - Vanilla
+                - Chocolate
+                - Chocolate
+                - Cookie Dough
+            3. Prepare Vanilla ice cream
+            4. Prepare Chocolate ice cream
+            5. Prepare Chocolate ice cream
+            6. Prepare Cookie Dough ice cream
+            7. Give ice creams to client with a friendly tone
+        </rationale>
+    </example>
 "#;
 
 #[instrument(name = "agent_caller_handler", skip(event, bedrock_agentruntime_client), fields(req_id = %event.context.request_id))]
@@ -67,7 +85,7 @@ async fn handler(
             .action_group_executor(ActionGroupExecutor::Lambda(ice_cream_maker_lambda))
             .description(
                 r"
-                    ActionGroup that allows to manage the ice cream maker to create ice creams.
+                ActionGroup that allows to manipulate the ice cream maker
                 ",
             )
             .function_schema(FunctionSchema::Functions(vec![
@@ -75,13 +93,11 @@ async fn handler(
                 .name("PrepareIceCream")
                 .description(
                     r"
-                        Manages the ice cream maker machine to make the ice creams of a given flavor.
-                        Should make sense as a realistic flavor for an ice cream.
-                        Once invoked, aknowledge it takes almost zero seconds for the ice cream to be made.
+                    Manages the ice cream maker machine to make the ice creams of a given flavor
                     ",
                 )
                 .parameters("flavor", ParameterDetail::builder()
-                .description("Flavor requested to be made with the ice cream maker machine.")
+                .description("Flavor requested to be made with the ice cream maker machine")
                 .r#type(ParameterType::String)
                 .required(true)
                 .build()?)
@@ -96,14 +112,14 @@ async fn handler(
     let waiter_api_schema_content = include_str!("../../waiter/schemas/waiter.yaml");
     let waiter_api_schema = ApiSchema::Payload(waiter_api_schema_content.to_string());
     let waiter_action_group = AgentActionGroup::builder()
-            .action_group_name("Waiter")
-            .action_group_executor(ActionGroupExecutor::Lambda(waiter_lambda))
-            .description(
-                r"
-                    ActionGroup that helps taking orders, adding and removing flavors from it.
-                ",
-            )
-            .api_schema(waiter_api_schema)
+        .action_group_name("Waiter")
+        .action_group_executor(ActionGroupExecutor::Lambda(waiter_lambda))
+        .description(
+            r"
+            ActionGroup that allows to take orders and ice cream flavors to add to orders or remove from orders
+            ",
+        )
+        .api_schema(waiter_api_schema)
         .build()?;
 
     // Agent Invoke Inline
@@ -121,7 +137,7 @@ async fn handler(
 
     let mut response = invoke_response.completion;
 
-    // Consume chunks from the stream
+    // Consume chunks and traces from the stream
     while let Some(event) = response.recv().await? {
         match event {
             InlineAgentResponseStream::Chunk(chunk) => {
@@ -130,18 +146,20 @@ async fn handler(
                     tracing::info!("Response Chunk: {:?}", &blob_text);
                 }
             }
-            InlineAgentResponseStream::Trace(inline_agent_trace_part) => {
-                if let Some(trace_chunk) = inline_agent_trace_part.trace {
-                    tracing::info!("Trace chunk: {:?}", trace_chunk);
+            /*
+             * Here I'm only logging Rationale traces.
+             * The Rationale object contains the reasoning of the agent given the user input.
+             * 
+             * Reference: https://docs.aws.amazon.com/bedrock/latest/userguide/trace-events.html
+             */
+            InlineAgentResponseStream::Trace(trace_part) => {
+                if let Some(Trace::OrchestrationTrace(OrchestrationTrace::Rationale(Rationale { text, .. }))) = trace_part.trace {
+                    tracing::info!("Rationale: {:?}", text);
                 }
             }
-            _ => {
-                // Do nothing
-            }
+            _ => {}
         }
     }
-
-    // tracing::info!("Response: {:#?}", response);
 
     Ok(())
 }

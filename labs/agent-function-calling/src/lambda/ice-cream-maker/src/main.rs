@@ -1,12 +1,11 @@
 mod types;
 
-use std::collections::HashMap;
-
 use lambda_runtime::{
     run, service_fn,
     tracing::{self, instrument},
     Error, LambdaEvent,
 };
+use std::collections::HashMap;
 use types::{AgentRequest, AgentResponse};
 
 #[instrument(name = "ice_cream_maker", skip(event), fields(req_id = %event.context.request_id))]
