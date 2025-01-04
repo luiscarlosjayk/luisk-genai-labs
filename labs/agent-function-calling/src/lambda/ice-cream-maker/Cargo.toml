@@ -1,0 +1,15 @@
+[package]
+name = "ice-cream-maker"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+
+[dependencies]
+aws-sdk-dynamodb = { workspace = true }
+aws-config = { workspace = true }
+lambda_runtime = { workspace = true }
+tokio = { workspace = true }
+tracing-subscriber = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

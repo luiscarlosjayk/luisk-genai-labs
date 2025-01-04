@@ -1,3 +1,4 @@
+import { NotUndefined } from "@luisk-genai-labs/utils/src/types";
 import * as cdk from 'aws-cdk-lib';
 import { FoundationModelIdentifier } from 'aws-cdk-lib/aws-bedrock';
 import * as dynamoDb from 'aws-cdk-lib/aws-dynamodb';
@@ -9,7 +10,6 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as secretsManager from 'aws-cdk-lib/aws-secretsmanager';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
-import { NotUndefined } from "@luisk-genai-labs/utils/src/types";
 
 export interface IFunctionProps {
     name: string;
@@ -97,7 +97,7 @@ export abstract class LambdaFunctionBuilder extends Construct {
         if (environmentVariable) {
             this.withEnvironmentVariable(environmentVariable, queue.queueName);
         }
-        
+
         return this;
     }
 
@@ -107,7 +107,7 @@ export abstract class LambdaFunctionBuilder extends Construct {
         if (environmentVariable) {
             this.withEnvironmentVariable(environmentVariable, table.tableName);
         }
-        
+
         return this;
     }
 
@@ -117,7 +117,7 @@ export abstract class LambdaFunctionBuilder extends Construct {
         if (environmentVariable) {
             this.withEnvironmentVariable(environmentVariable, bucket.bucketName);
         }
-        
+
         return this;
     }
 
@@ -152,7 +152,7 @@ export abstract class LambdaFunctionBuilder extends Construct {
 
     withVpc(vpc: ec2.IVpc, securityGroups: ec2.ISecurityGroup | ec2.ISecurityGroup[], vpcSubnets?: ec2.SubnetSelection): this {
         vpcSubnets = vpcSubnets ?? { subnetType: ec2.SubnetType.PRIVATE_ISOLATED };
-        
+
         securityGroups = Array.isArray(securityGroups)
             ? securityGroups
             : [securityGroups];
@@ -188,23 +188,23 @@ export abstract class LambdaFunctionBuilder extends Construct {
                 effect: iam.Effect.ALLOW,
                 resources: ['*'],
                 actions: [
-                  'logs:CreateLogGroup',
-                  'logs:CreateLogStream',
-                  'logs:DescribeLogGroups',
-                  'logs:DescribeLogStreams',
-                  'logs:PutLogEvents'
+                    'logs:CreateLogGroup',
+                    'logs:CreateLogStream',
+                    'logs:DescribeLogGroups',
+                    'logs:DescribeLogStreams',
+                    'logs:PutLogEvents'
                 ]
-              },
-              {
+            },
+            {
                 effect: iam.Effect.ALLOW,
                 resources: ['*'],
                 actions: [
-                  'ec2:DescribeNetworkInterfaces',
-                  'ec2:DetachNetworkInterface',
-                  'ec2:CreateNetworkInterface',
-                  'ec2:DeleteNetworkInterface',
-                  'ec2:DescribeInstances',
-                  'ec2:AttachNetworkInterface'
+                    'ec2:DescribeNetworkInterfaces',
+                    'ec2:DetachNetworkInterface',
+                    'ec2:CreateNetworkInterface',
+                    'ec2:DeleteNetworkInterface',
+                    'ec2:DescribeInstances',
+                    'ec2:AttachNetworkInterface'
                 ]
             },
         ];
@@ -214,8 +214,8 @@ export abstract class LambdaFunctionBuilder extends Construct {
         if (!bedrockModelIdentifiers) {
             return [];
         }
-        
-        actions??= [ // Default actions if none are passed
+
+        actions ??= [ // Default actions if none are passed
             'bedrock:InvokeModel',
             'bedrock:InvokeModelWithResponseStream',
         ];
@@ -232,7 +232,7 @@ export abstract class LambdaFunctionBuilder extends Construct {
         if (!knowledgeBaseIds) {
             return [];
         }
-        
+
         actions ??= [ // Default actions if none are passed
             'bedrock:InvokeAgent',
             'bedrock:InvokeModelWithResponseStream',
