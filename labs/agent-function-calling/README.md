@@ -27,7 +27,7 @@ We will provide the agent with access to the following actions:
 - Remove flavors from an order
 - Operate the ice cream maker to prepare an ice cream of a given flavor
 
-The expectation is that the agent doesn't add flavors to unexisting orders, or remove unexisting flavors in an order, or that it starts operating the ice cream machine without having an order to work with, or that it starts an order without knowing upfront the client's name.
+The expectation is that the agent doesn't add flavors to non-existing orders, or remove non-existing flavors in an order, or that it starts operating the ice cream machine without having an order to work with, or that it starts an order without knowing upfront the client's name.
 
 We expect the agent to be smart enough and plan those steps accordingly.
 But, any other employee of a happy ice cream shop, we need to provide all those guidelines and business rules as "instructions".
@@ -35,7 +35,7 @@ But, any other employee of a happy ice cream shop, we need to provide all those 
 In AWS Bedrock, an agent consists of the following:
 1. A Foundational model: Which LLM to use, in our example we will use Claude 3 from Anthropic. The agent invokes the model to interpret user input and subsequent prompts in its orchestration process. The agent also invokes the FM to generate responses and follow-up steps in its process.
 2. Instructions: That describe what the agent is designed to do. With advanced prompts, you can further customize instructions for the agent at every step of orchestration and include Lambda functions to parse each step's output.
-3. Knowledge bases: The agent queries the knowledge base for extra context to augment response generation and input into steps of the orchestration process. What is usually known for Retrieval Agumented Generation or RAG.
+3. Knowledge bases: The agent queries the knowledge base for extra context to augment response generation and input into steps of the orchestration process. What is usually known for Retrieval Augmented Generation or RAG.
 4. Action Groups (Functions or Tools): Actions that the agent should perform for the user in order to accomplish tasks. At the end, these are lambda functions.
 
 Notice that an agent should have at least one of either knowledge bases or action groups, in our example, it will have only action groups and no knowledge base will be provided.
@@ -221,7 +221,7 @@ Notice the lambda function expects the client's request to come in its payload a
 e.g.:
 ```ts
 {
-    "input": "Hi, may I get a vanilla ice cream and another one of Chocolate, please? I'm Nancy by the way."
+  "input": "Hi, may I get a vanilla ice cream and another one of Chocolate, please? I'm Nancy by the way."
 }
 ```
 
@@ -382,7 +382,9 @@ Now, if we inspect the logs in CloudWatch these are some snippets of what we cou
 
 And if you inspect the logs for the waiter and the ice-cream-maker lambdas you will see the events incoming from the agent.
 
-**Pretty cool!** 🍦
+**Pretty cool!**
+
+And that's how Nancy got her ice creams made by an agent, we could say these are AIce Creams _(pun intended)_
 
 ## Observations
 
