@@ -13,3 +13,4 @@ Chat effortlessly with documents uploaded to a S3 bucket without having to setup
 ## Inpiration
 
 1. [amazon-bedrock-samples](https://github.com/aws-samples/amazon-bedrock-samples)
+2. [Multi Agent Orchestrator](https://awslabs.github.io/multi-agent-orchestrator)
