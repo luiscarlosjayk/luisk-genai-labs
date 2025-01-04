@@ -392,6 +392,16 @@ What we're doing here is what is known as the ReAct agentic pattern, which looks
 
 You will see from logs that the agent is thinking through what's the current output and what should be the next one to go for.
 
+## What's next?
+
+Feel free to play with this implementation, change the agent's instructions, change the business logic, perhaps instead of an ice creams the agent could prepare coffees.
+
+And instead of relying on the `request_id` for mocking an order creation, we could connect the waiter lambda to a database, and add some delay to the ice cream maker action group, so the agent has to actually wait, simulating a more real scenario.
+
+We could also add more agents, like if they were employees in charge of different things in the shop.
+
+Definitively there are plenty of options that we could add to grow this experiment. If you do, please share those.
+
 ## Inspiration:
 
 - [Creating an agent with function definitions](https://github.com/aws-samples/amazon-bedrock-samples/tree/main/agents-and-function-calling/bedrock-agents/agent-blueprint-templates/lib/stacks/01-agent-with-function-definitions)
