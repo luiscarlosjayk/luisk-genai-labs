@@ -3,7 +3,7 @@ import * as appsync from 'aws-cdk-lib/aws-appsync';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
 
-export class WebSocketAITranslation extends cdk.Stack {
+export class WebSocketAIChat extends cdk.Stack {
     protected _lambda: IFunction;
 
     constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
@@ -14,7 +14,7 @@ export class WebSocketAITranslation extends cdk.Stack {
         };
 
         const api = new appsync.EventApi(this, `EventApi${id}`, {
-            apiName: 'websocket-ai-translation',
+            apiName: 'websocket-ai-chat',
             ownerContact: 'luisk-genai-labs',
             authorizationConfig: {
                 authProviders: [
@@ -54,25 +54,25 @@ export class WebSocketAITranslation extends cdk.Stack {
 
         new cdk.CfnOutput(this, 'OutputHttpDns', {
             value: api.httpDns,
-            exportName: 'websocket-ai-translation-http-dns',
+            exportName: 'websocket-ai-chat-http-dns',
             description: 'The HTTP DNS of the AppSync API',
         });
 
         new cdk.CfnOutput(this, 'OutputRealtimeDns', {
             value: api.realtimeDns,
-            exportName: 'websocket-ai-translation-realtime-dns',
+            exportName: 'websocket-ai-chat-realtime-dns',
             description: 'The realtime DNS of the AppSync API',
         });
 
         new cdk.CfnOutput(this, 'OutputApiKeys', {
             value: Object.values(api.apiKeys).map((key) => key.attrApiKey).join(','),
-            exportName: 'websocket-ai-translation-api-keys',
+            exportName: 'websocket-ai-chat-api-keys',
             description: 'The API keys of the AppSync API',
         });
 
         new cdk.CfnOutput(this, 'OutputLogGroup', {
             value: api.logGroup.logGroupName,
-            exportName: 'websocket-ai-translation-log-group',
+            exportName: 'websocket-ai-chat-log-group',
             description: 'The log group of the AppSync API',
         });
     }

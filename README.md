@@ -8,7 +8,7 @@ All laboratories are geneated using the [AWS Cloud Development Kit](https://docs
 
 ### 1. [Zero shot chat with document](./labs/zero-shot-chat-with-document)
 ### 2. [Agent Function Calling: Ice Cream Shop](./labs/agent-function-calling)
-### 3. [Serverless Websockets with AI Translation](./labs/websocket-ai-translation)
+### 3. [Serverless Websocket Chat Application with AI Translation](./labs/websocket-ai-chat)
 
 ## Inpiration
 

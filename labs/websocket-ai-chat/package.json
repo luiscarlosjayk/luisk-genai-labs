@@ -1,8 +1,8 @@
 {
-  "name": "@luisk-genai-labs/websockets-ai-translation",
+  "name": "@luisk-genai-labs/websockets-ai-chat",
   "version": "1.0.0",
-  "stackName": "websockets-ai-translation",
-  "description": "Leverage websockets to translate text in real time, with help of AI.",
+  "stackName": "websockets-ai-chat",
+  "description": "Leverage websockets to translate text in real time for a chat application with help of AI and AWS AppSync.",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
