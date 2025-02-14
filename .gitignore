@@ -8,6 +8,9 @@ unit-tests.xml
 # Sam builds
 .aws-sam/
 
+# Leptos
+dist/
+
 #Environment vars
 .envrc
 .env

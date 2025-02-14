@@ -8,10 +8,10 @@ All laboratories are geneated using the [AWS Cloud Development Kit](https://docs
 
 ### 1. [Zero shot chat with document](./labs/zero-shot-chat-with-document)
 ### 2. [Agent Function Calling: Ice Cream Shop](./labs/agent-function-calling)
-
-Chat effortlessly with documents uploaded to a S3 bucket without having to setup a vector store for embeddings.
+### 3. [Serverless Websockets with AI Translation](./labs/websocket-ai-translation)
 
 ## Inpiration
 
 1. [amazon-bedrock-samples](https://github.com/aws-samples/amazon-bedrock-samples)
 2. [Multi Agent Orchestrator](https://awslabs.github.io/multi-agent-orchestrator)
+2. [I didn't know AWS AppSync could do that!](https://www.youtube.com/watch?v=eBbfuwb_bzY&t=3119s)

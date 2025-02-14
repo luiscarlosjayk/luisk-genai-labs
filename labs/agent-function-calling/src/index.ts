@@ -15,7 +15,7 @@ const AWS_REGION = process.env.AWS_REGION || process.env.CDK_DEFAULT_REGION;
 
 const app = new cdk.App();
 
-const stack = new AgentFunctionCallingStack(app, 'AgentFunctionCalling', {
+new AgentFunctionCallingStack(app, 'AgentFunctionCalling', {
     stackName,
     env: {
         account: AWS_ACCOUNT,

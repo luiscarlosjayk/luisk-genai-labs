@@ -2,7 +2,7 @@
 import * as cdk from 'aws-cdk-lib';
 import 'source-map-support/register';
 import { loadEnvFile } from '@luisk-genai-labs/utils/src/load-env';
-import { ZeroShotChatWithDocumentStack } from './stack';
+import { WebSocketAITranslation } from './stack';
 import { stackName } from '../package.json';
 
 // Load .env file
@@ -15,7 +15,7 @@ const AWS_REGION = process.env.AWS_REGION || process.env.CDK_DEFAULT_REGION;
 
 const app = new cdk.App();
 
-new ZeroShotChatWithDocumentStack(app, 'ZeroShotChatWithDocument', {
+new WebSocketAITranslation(app, 'WebSocketAITranslation', {
     stackName,
     env: {
         account: AWS_ACCOUNT,

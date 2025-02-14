@@ -1,8 +1,8 @@
 {
-  "name": "@luisk-genai-labs/stub-lab",
+  "name": "@luisk-genai-labs/websockets-ai-translation",
   "version": "1.0.0",
-  "stackName": "stub-stack",
-  "description": "Stub lab project used to easily auto generate new labs.",
+  "stackName": "websockets-ai-translation",
+  "description": "Leverage websockets to translate text in real time, with help of AI.",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",

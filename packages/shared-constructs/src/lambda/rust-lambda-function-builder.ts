@@ -13,6 +13,7 @@ export interface RustLambdaFunctionProps {
 export class RustLambdaFunctionBuilder extends LambdaFunctionBuilder {
     protected _lambda: rustLambda.RustFunction;
     protected _manifestPath: string;
+    protected _binaryName?: string;
     protected _bundling?: rustLambda.BundlingOptions;
 
     constructor(scope: Construct, id: string, props: RustLambdaFunctionProps) {
@@ -20,6 +21,11 @@ export class RustLambdaFunctionBuilder extends LambdaFunctionBuilder {
 
         // Defaults
         this.withManifest(props.path);
+    }
+
+    withBinaryName(name: string): this {
+        this._binaryName = name;
+        return this;
     }
 
     withManifest(path: string): this {
@@ -40,6 +46,7 @@ export class RustLambdaFunctionBuilder extends LambdaFunctionBuilder {
         this._lambda = new rustLambda.RustFunction(this, 'RustFunction', {
             functionName: this._name,
             manifestPath: this._manifestPath,
+            binaryName: this._binaryName,
             timeout: this._duration,
             memorySize: this._memorySize,
             logGroup: this._logGroup,
